@@ -14,19 +14,42 @@ import os
 from django.conf import settings
 
 
+# def getJsonTest(request):
+#     t = '''{"result":[{"datetime":"2014/01/01","temp":24,"humidity":30},
+# {"datetime":"2014/01/02","temp":24,"humidity":44},
+# {"datetime":"2014/01/03","temp":22,"humidity":30},
+# {"datetime":"2014/01/04","temp":21,"humidity":55},
+# {"datetime":"2014/01/05","temp":20,"humidity":35},
+# {"datetime":"2014/01/06","temp":23,"humidity":32},
+# {"datetime":"2014/01/07","temp":22,"humidity":35},
+# {"datetime":"2014/01/08","temp":25,"humidity":69},
+# {"datetime":"2014/01/09","temp":27,"humidity":30},
+# {"datetime":"2014/01/10","temp":30,"humidity":72},
+# {"datetime":"2014/01/11","temp":23,"humidity":30}]}'''
+#     response = HttpResponse(t)
+#     response['access-control-allow-origin'] = '*'
+#     return response
+
+
 def getJsonTest(request):
-    t = '''{"result":[{"datetime":"2014/01/01","temp":24,"humidity":30},
-{"datetime":"2014/01/02","temp":24,"humidity":44},
-{"datetime":"2014/01/03","temp":22,"humidity":30},
-{"datetime":"2014/01/04","temp":21,"humidity":55},
-{"datetime":"2014/01/05","temp":20,"humidity":35},
-{"datetime":"2014/01/06","temp":23,"humidity":32},
-{"datetime":"2014/01/07","temp":22,"humidity":35},
-{"datetime":"2014/01/08","temp":25,"humidity":69},
-{"datetime":"2014/01/09","temp":27,"humidity":30},
-{"datetime":"2014/01/10","temp":30,"humidity":72},
-{"datetime":"2014/01/11","temp":23,"humidity":30}]}'''
-    response = HttpResponse(t)
+    data = nodeData.objects.raw(
+        'select * from (select node_id,max(dt) as maxdt from demo_nodedata group by node_id) x join demo_nodedata d on d.node_id ==x.node_id and d.dt = x.maxdt;')
+    result = {}
+    result.setdefault("list", [])
+    for item in data:
+        k = {}
+        k['id'] = item.id
+        k['node_id'] = item.node_id
+        k['t1'] = item.t1
+        k['t2'] = item.t2
+        k['h1'] = item.h1
+        k['h2'] = item.h2
+        k['lng'] = item.lng
+        k['lat'] = item.lat
+        k['dt'] = item.dt.strftime('%Y/%m/%d %H:%M')
+        result["list"].append(k)
+    # result = getUnsolvedHigher(0)
+    response = JsonResponse(result, status=200)
     response['access-control-allow-origin'] = '*'
     return response
 

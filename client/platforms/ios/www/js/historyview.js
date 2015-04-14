@@ -39,7 +39,13 @@ function setd3(){
                         .y(function(d) {
                             return y2(d.humidity);
                         });
-
+                    var zeroline = d3.svg.line()
+                        .x(function(d) {
+                            return 0;
+                        })
+                        .y(function(d) {
+                            return 0;
+                        });
 
                     // Adds the svg canvas
                     var svg = d3.select("#svg-container")
@@ -83,6 +89,7 @@ function setd3(){
                         svg.append("path")
                             .attr("class", "line data1")
                             .attr("d", templine(data.result));
+
                         svg.append("path")
                             .attr("class", "line data2")
                             .attr("d", humiline(data.result));
@@ -105,21 +112,22 @@ function setd3(){
                             .attr("transform", "translate(" + (width + 15) + ",0)")
                             .call(yAxisRight);
 
-                        svg.append("text")
+
+                    });
+                    svg.append("text")
                             .attr("transform", "rotate(-90)")
                             .attr("y", 0 - margin.left)
                             .attr("x", 0 - (height / 2))
                             .attr("dy", "1em")
                             .style("text-anchor", "middle")
                             .text("tempareture");
-                    });
                     svg.append("text")
                         .attr("transform", "rotate(-90)")
-                        .attr("y", 0 - margin.left)
-                        .attr("x", (height / 2))
+                        .attr("y", margin.left+width)
+                        .attr("x", 0-(height / 2))
                         .attr("dy", "1em")
                         .style("text-anchor", "middle")
-                        .text("Value");
+                        .text("humidity");
 }
 
 $(document).ready(function($) {
