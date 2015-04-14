@@ -1,3 +1,5 @@
+var Lat,Lng;
+
 function setd3(){
                        // Set the dimensions of the canvas / graph
                     var margin = {
@@ -10,7 +12,7 @@ function setd3(){
                         height = 270 - margin.top - margin.bottom;
 
                     // Parse the date / time
-                    var parseDate = d3.time.format("%Y/%m/%d").parse;
+                    var parseDate = d3.time.format("%Y/%m/%d %H:%M").parse;
 
                     // Set the ranges
                     var x = d3.time.scale().range([0, width]);
@@ -29,7 +31,7 @@ function setd3(){
                             return x(d.date);
                         })
                         .y(function(d) {
-                            return y(d.temp);
+                            return y(d.t1);
                         });
 
                     var humiline = d3.svg.line()
@@ -37,7 +39,7 @@ function setd3(){
                             return x(d.date);
                         })
                         .y(function(d) {
-                            return y2(d.humidity);
+                            return y2(d.h1);
                         });
                     var zeroline = d3.svg.line()
                         .x(function(d) {
@@ -69,30 +71,38 @@ function setd3(){
                     d3.json("http://ec2-54-148-238-83.us-west-2.compute.amazonaws.com/api/getJsonTest", function(error, data) {
                         if (error)
                             return console.error(error);
+                        // console.log(data)
+                        data.list.forEach(function(d) {
 
-                        data.result.forEach(function(d) {
-
-                            d.date = parseDate(d.datetime);
-
+                            d.date = parseDate(d.dt);
                         });
+                        // console.log(data.list[data.list.length-1])
+                        var newestData=data.list[data.list.length-1]
+                        $('#label_updatedTime').html(newestData.dt)
+                        $('#label_updatedTemp').html(newestData.t1+'℃')
+                        $('#label_updatedHumi').html(newestData.h1+'%')
+                        Lat=newestData.lat
+                        Lng=newestData.lng
 
+
+                        // console.log(data.list)
                         // Scale the range of the data
-                        x.domain(d3.extent(data.result, function(d) {
+                        x.domain(d3.extent(data.list, function(d) {
                             return d.date;
                         }));
-                        y.domain([0, d3.max(data.result, function(d) {
-                            return d.temp;
+                        y.domain([0, d3.max(data.list, function(d) {
+                            return d.t1;
                         })]);
-                        y2.domain([0, d3.max(data.result, function(d) {
-                            return d.humidity;
+                        y2.domain([0, d3.max(data.list, function(d) {
+                            return d.h1;
                         })]);
                         svg.append("path")
                             .attr("class", "line data1")
-                            .attr("d", templine(data.result));
+                            .attr("d", templine(data.list));
 
                         svg.append("path")
                             .attr("class", "line data2")
-                            .attr("d", humiline(data.result));
+                            .attr("d", humiline(data.list));
 
 
                         // Add the X Axis
@@ -112,7 +122,7 @@ function setd3(){
                             .attr("transform", "translate(" + (width + 15) + ",0)")
                             .call(yAxisRight);
 
-
+                        setMap();
                     });
                     svg.append("text")
                             .attr("transform", "rotate(-90)")
@@ -128,11 +138,11 @@ function setd3(){
                         .attr("dy", "1em")
                         .style("text-anchor", "middle")
                         .text("humidity");
+                        // console.log(Lat)
 }
 
-$(document).ready(function($) {
-    setd3();
-    var myOptions = {
+function setMap(){
+       var myOptions = {
         zoom: 13,
         center: new google.maps.LatLng(24.4281988, 54.6231222),
         streetViewControl: false,
@@ -357,34 +367,16 @@ $(document).ready(function($) {
         size: new google.maps.Size(20, 32),
     };
     var marker = new google.maps.Marker({
-        position: new google.maps.LatLng(24.4211988, 54.6231222),
+        position: new google.maps.LatLng(Lat, Lng),
         map: map,
         icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=25|FF0000|000000'
     });
+}
 
-    var marker2 = new google.maps.Marker({
-        position: new google.maps.LatLng(24.4282388, 54.6231222),
-        map: map,
-        icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=25|FF0000|000000'
-    });
-    var marker3 = new google.maps.Marker({
-        position: new google.maps.LatLng(24.4218688, 54.5721222),
-        map: map,
-        icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=25|FF0000|000000'
-    });
-    var marker4 = new google.maps.Marker({
-        position: new google.maps.LatLng(24.4231928, 54.6291222),
-        map: map,
-        icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=22|EE1100|000000'
-    });
-    var marker5 = new google.maps.Marker({
-        position: new google.maps.LatLng(24.4131938, 54.6231222),
-        map: map,
-        icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=21|00AA00|000000'
-    });
-    google.maps.event.addListener(marker, 'click', function() {
-        map.setCenter(marker.getPosition());
-        window.open('/demo/historical/1', 'detail')
-    });
+$(document).ready(function($) {
+    setd3();
+
+
+
 
 });

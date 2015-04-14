@@ -240,8 +240,8 @@
             size: new google.maps.Size(20, 32),
         };
         $.ajax({
-                // url: 'http://ec2-54-148-238-83.us-west-2.compute.amazonaws.com/api/getJsonTest',
-                url: 'http://127.0.0.1:8000/getJsonTest',
+                url: 'http://ec2-54-148-238-83.us-west-2.compute.amazonaws.com/api/getJsonTest',
+                // url: 'http://127.0.0.1:8000/getJsonTest',
                 type: 'Get',
                 dataType: 'json',
                 // data: {param1: 'value1'},
@@ -253,11 +253,13 @@
                     var marker = new google.maps.Marker({
                         position: new google.maps.LatLng(val['lat'], val['lng']),
                         map: map,
+                            optimized: false,
+
                         icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld='+val['t1']+'|FF0000|000000'
                     });
                     google.maps.event.addListener(marker, 'click', function() {
                         map.setCenter(marker.getPosition());
-                        window.open('node_detail.html', 'detail')
+                        window.open('node_detail.html?id='+val['id'], 'detail')
                     });
                 });
             })
