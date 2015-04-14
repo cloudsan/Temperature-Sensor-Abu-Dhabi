@@ -7,6 +7,9 @@ urlpatterns = patterns('',
                        # url(r'^blog/', include('blog.urls')),
                        url(r'postdata', 'demo.views.postData'),
                        url(r'getdata', 'demo.views.getData'),
+
+                       url(r'getJsonTest', 'demo.views.getJsonTest'),
+
                        url(r'^admin/', include(admin.site.urls)),
                        url(r'^demo/historical/(?P<id>\d+)/$',
                            'demo.views.historical'),

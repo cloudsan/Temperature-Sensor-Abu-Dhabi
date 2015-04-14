@@ -58,6 +58,9 @@ ROOT_URLCONF = 'arduino_sensor.urls'
 
 WSGI_APPLICATION = 'arduino_sensor.wsgi.application'
 
+CORS_ORIGIN_WHITELIST = (
+        '*',
+    )
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases

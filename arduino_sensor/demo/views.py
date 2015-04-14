@@ -10,6 +10,25 @@ import time
 import datetime
 from urllib.parse import urlparse
 from django.views.decorators.csrf import csrf_exempt
+import os
+from django.conf import settings
+
+
+def getJsonTest(request):
+    t = '''{"result":[{"datetime":"2014/01/01","temp":24,"humidity":30},
+{"datetime":"2014/01/02","temp":24,"humidity":44},
+{"datetime":"2014/01/03","temp":22,"humidity":30},
+{"datetime":"2014/01/04","temp":21,"humidity":55},
+{"datetime":"2014/01/05","temp":20,"humidity":35},
+{"datetime":"2014/01/06","temp":23,"humidity":32},
+{"datetime":"2014/01/07","temp":22,"humidity":35},
+{"datetime":"2014/01/08","temp":25,"humidity":69},
+{"datetime":"2014/01/09","temp":27,"humidity":30},
+{"datetime":"2014/01/10","temp":30,"humidity":72},
+{"datetime":"2014/01/11","temp":23,"humidity":30}]}'''
+    response = HttpResponse(t)
+    response['access-control-allow-origin'] = '*'
+    return response
 
 
 @csrf_exempt
