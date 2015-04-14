@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from demo.models import Arduino_data, Setting
-from django.http import HttpResponse
+from demo.models import Arduino_data, Setting, nodeData
+from django.http import HttpResponse, JsonResponse
 # Create your views here.
 from urllib.request import urlopen
 import urllib.error
@@ -8,6 +8,26 @@ import csv
 import io
 import time
 import datetime
+from urllib.parse import urlparse
+from django.views.decorators.csrf import csrf_exempt
+
+
+@csrf_exempt
+def postData(request):
+    id = request.GET.get('id')
+    t1 = request.GET.get('t1')
+    t2 = request.GET.get('t2')
+    h1 = request.GET.get('h1')
+    h2 = request.GET.get('h2')
+    lng = request.GET.get('long')
+    lng = float('54.' + lng)
+    lat = request.GET.get('lati')
+    lat = float('24.' + lat)
+    dt = request.GET.get('dt')
+    newOne = nodeData(
+        id=id, t1=t1, h1=h1, lng=lng, lat=lat, dt=dt, t2=t2, h2=h2)
+
+    return JsonResponse(newOne.getDict())
 
 
 def historical(request, id):
