@@ -23,10 +23,12 @@ def postData(request):
     lng = float('54.' + lng)
     lat = request.GET.get('lati')
     lat = float('24.' + lat)
-    dt = request.GET.get('dt')
+    dtstr = request.GET.get('dt')
+    dt = time.strptime(dtstr, '%Y/%m/%d,%H:%M')
+    dtstr = time.strftime('%Y-%m-%d %H:%M', dt)
     newOne = nodeData(
-        id=id, t1=t1, h1=h1, lng=lng, lat=lat, dt=dt, t2=t2, h2=h2)
-
+        node_id=id, t1=t1, h1=h1, lng=lng, lat=lat, dt=dtstr, t2=t2, h2=h2)
+    newOne.save()
     return JsonResponse(newOne.getDict())
 
 

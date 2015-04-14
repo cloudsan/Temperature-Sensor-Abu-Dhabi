@@ -28,15 +28,15 @@ class nodeData(models.Model):
     lng = models.FloatField(default=0)
     lat = models.FloatField(default=0)
     dt = models.DateTimeField()
-    def getDict(self):
-        result ={}
-        result['id']=self.id
-        result['t1']=self.t1
-        result['t2']=self.t2
-        result['h1']=self.h1
-        result['h2']=self.h2
-        result['lng']=self.lng
-        result['lat']=self.lat
-        result['dt']=self.dt
-        return result
 
+    def getDict(self):
+        result = {}
+        result['id'] = self.id
+        result['t1'] = self.t1
+        result['t2'] = self.t2
+        result['h1'] = self.h1
+        result['h2'] = self.h2
+        result['lng'] = self.lng
+        result['lat'] = self.lat
+        result['dt'] = self.dt
+        return result
