@@ -32,6 +32,30 @@ def postData(request):
     return JsonResponse(newOne.getDict())
 
 
+def getData(request):
+    # data = nodeData.objects.filter(
+    #     userID_id=id).order_by('-created_at')[:10]
+    data = nodeData.objects.all()
+    result = {}
+    result.setdefault("list", [])
+    for item in data:
+        k = {}
+        k['id'] = item.id
+        k['node_id'] = item.node_id
+        k['t1'] = item.t1
+        k['t2'] = item.t2
+        k['h1'] = item.h1
+        k['h2'] = item.h2
+        k['lng'] = item.lng
+        k['lat'] = item.lat
+        k['dt'] = item.dt.strftime('%Y/%m/%d %H:%M')
+        result["list"].append(k)
+    # result = getUnsolvedHigher(0)
+    response = JsonResponse(result, status=200)
+    response['access-control-allow-origin'] = '*'
+    return response
+
+
 def historical(request, id):
     return render(request, 'demo_history.html')
 
