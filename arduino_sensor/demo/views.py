@@ -77,7 +77,7 @@ def postData(request):
 def getData(request):
     # data = nodeData.objects.filter(
     #     userID_id=id).order_by('-created_at')[:10]
-    data = nodeData.objects.all()
+    data = nodeData.objects.all().order_by('dt')
     result = {}
     result.setdefault("list", [])
     for item in data:
