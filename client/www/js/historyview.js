@@ -68,7 +68,7 @@ function setd3(){
                         chart.attr("height", Math.round(targetWidth / aspect));
                     }).trigger("resize");
                     // Get the data
-                    d3.json("http://ec2-54-148-238-83.us-west-2.compute.amazonaws.com/api/getData", function(error, data) {
+                    d3.json("http://ec2-54-148-238-83.us-west-2.compute.amazonaws.com/api/getdata", function(error, data) {
                         if (error)
                             return console.error(error);
                         // console.log(data)
