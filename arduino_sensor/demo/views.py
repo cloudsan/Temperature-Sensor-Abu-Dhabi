@@ -74,10 +74,10 @@ def postData(request):
     return JsonResponse(newOne.getDict())
 
 
-def getData(request):
+def getData(request, id):
     # data = nodeData.objects.filter(
     #     userID_id=id).order_by('-created_at')[:10]
-    data = nodeData.objects.all().order_by('dt')
+    data = nodeData.objects.filter(node_id=id).order_by('dt')
     result = {}
     result.setdefault("list", [])
     for item in data:
