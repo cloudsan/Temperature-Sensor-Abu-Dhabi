@@ -1,4 +1,4 @@
-var Lat,Lng;
+var Lat,Lng,currentTemp;
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -25,7 +25,7 @@ function setd3(){
                     var y2 = d3.scale.linear().range([height, 0]);
                     // Define the axes
                     var xAxis = d3.svg.axis().scale(x)
-                        .orient("bottom").ticks(5).tickFormat(d3.time.format("%m/%d"));
+                        .orient("bottom").ticks(5).tickFormat(d3.time.format("%m/%d %H:%M"));
 
                     var yAxis = d3.svg.axis().scale(y)
                         .orient("left").ticks(5);
@@ -46,13 +46,13 @@ function setd3(){
                         .y(function(d) {
                             return y2(d.h1);
                         });
-                    var zeroline = d3.svg.line()
-                        .x(function(d) {
-                            return 0;
-                        })
-                        .y(function(d) {
-                            return 0;
-                        });
+                    // var zeroline = d3.svg.line()
+                    //     .x(function(d) {
+                    //         return 0;
+                    //     })
+                    //     .y(function(d) {
+                    //         return 0;
+                    //     });
 
                     // Adds the svg canvas
                     var svg = d3.select("#svg-container")
@@ -74,7 +74,7 @@ function setd3(){
                     }).trigger("resize");
                     // Get the data
                     var node_id = getParameterByName('id');
-                    d3.json("http://ec2-54-148-238-83.us-west-2.compute.amazonaws.com/api/getdata"+node_id, function(error, data) {
+                    d3.json("http://ec2-54-148-238-83.us-west-2.compute.amazonaws.com/api/getdata/"+node_id, function(error, data) {
                     // d3.json("http://127.0.0.1:8000/getdata/"+node_id, function(error, data) {
 
                         if (error)
@@ -91,6 +91,7 @@ function setd3(){
                         $('#label_updatedHumi').html(newestData.h1+'%')
                         Lat=newestData.lat
                         Lng=newestData.lng
+                        currentTemp=newestData.t1
 
 
                         // console.log(data.list)
@@ -98,12 +99,16 @@ function setd3(){
                         x.domain(d3.extent(data.list, function(d) {
                             return d.date;
                         }));
-                        y.domain([0, d3.max(data.list, function(d) {
+                        y.domain([d3.min(data.list, function(d) {
                             return d.t1;
-                        })]);
-                        y2.domain([0, d3.max(data.list, function(d) {
+                        })-2, d3.max(data.list, function(d) {
+                            return d.t1;
+                        })+2]);
+                        y2.domain([d3.min(data.list, function(d) {
                             return d.h1;
-                        })]);
+                        })-2, d3.max(data.list, function(d) {
+                            return d.h1;
+                        })+2]);
                         svg.append("path")
                             .attr("class", "line data1")
                             .attr("d", templine(data.list));
@@ -152,7 +157,7 @@ function setd3(){
 function setMap(){
        var myOptions = {
         zoom: 13,
-        center: new google.maps.LatLng(24.4281988, 54.6231222),
+        center: new google.maps.LatLng(Lat,Lng),
         streetViewControl: false,
         scaleControl: true,
         zoomControl: true,
@@ -369,15 +374,17 @@ function setMap(){
         styles: stylesArray
     });
 
-    var image = {
-        url: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=25|FF0000|000000',
-        // This marker is 20 pixels wide by 32 pixels tall.
-        size: new google.maps.Size(20, 32),
-    };
+    // var image = {
+    //     url: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=25|FF0000|000000',
+    //     // This marker is 20 pixels wide by 32 pixels tall.
+    //     size: new google.maps.Size(20, 32),
+    // };
+
+
     var marker = new google.maps.Marker({
         position: new google.maps.LatLng(Lat, Lng),
         map: map,
-        icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=25|FF0000|000000'
+        icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld='+Math.round(currentTemp)+'|FF0000|000000'
     });
 }
 
