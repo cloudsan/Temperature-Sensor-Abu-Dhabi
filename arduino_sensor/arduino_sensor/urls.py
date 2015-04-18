@@ -6,7 +6,7 @@ urlpatterns = patterns('',
                        # url(r'^$', 'arduino_sensor.views.home', name='home'),
                        # url(r'^blog/', include('blog.urls')),
                        url(r'postdata', 'demo.views.postData'),
-                       url(r'getdata', 'demo.views.getData'),
+                       url(r'getdata/(?P<id>\d+)', 'demo.views.getData'),
 
                        url(r'getJsonTest', 'demo.views.getJsonTest'),
 

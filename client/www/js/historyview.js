@@ -1,5 +1,10 @@
 var Lat,Lng;
-
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
 function setd3(){
                        // Set the dimensions of the canvas / graph
                     var margin = {
@@ -68,7 +73,10 @@ function setd3(){
                         chart.attr("height", Math.round(targetWidth / aspect));
                     }).trigger("resize");
                     // Get the data
-                    d3.json("http://ec2-54-148-238-83.us-west-2.compute.amazonaws.com/api/getdata", function(error, data) {
+                    var node_id = getParameterByName('id');
+                    d3.json("http://ec2-54-148-238-83.us-west-2.compute.amazonaws.com/api/getdata"+node_id, function(error, data) {
+                    // d3.json("http://127.0.0.1:8000/getdata/"+node_id, function(error, data) {
+
                         if (error)
                             return console.error(error);
                         // console.log(data)
