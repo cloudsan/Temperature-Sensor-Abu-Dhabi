@@ -24,7 +24,7 @@
             size: new google.maps.Size(20, 32),
         };
         $.ajax({
-                url: 'http://ec2-54-148-238-83.us-west-2.compute.amazonaws.com/api/getJsonTest',
+                url: 'http://ec2-50-16-55-61.compute-1.amazonaws.com/api/getJsonTest',
                 // url: 'http://127.0.0.1:8000/getJsonTest',
                 type: 'Get',
                 dataType: 'json',
