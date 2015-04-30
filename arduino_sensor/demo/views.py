@@ -33,7 +33,7 @@ from django.conf import settings
 
 def getJsonTest(request):
     data = nodeData.objects.raw(
-        'select * from (select node_id,max(dt) as maxdt from demo_nodedata group by node_id) x join demo_nodedata d on d.node_id ==x.node_id and d.dt = x.maxdt;')
+        'select * from (select node_id,max(dt) as maxdt from demo_nodedata group by node_id) x join demo_nodedata d on d.node_id ==x.node_id and d.dt = x.maxdt order by maxdt desc;')
     result = {}
     result.setdefault("list", [])
     for item in data:
@@ -77,7 +77,7 @@ def postData(request):
 def getData(request, id):
     # data = nodeData.objects.filter(
     #     userID_id=id).order_by('-created_at')[:10]
-    data = nodeData.objects.filter(node_id=id).order_by('dt')
+    data = nodeData.objects.filter(node_id=id).order_by('-dt')[:100][::-1]
     result = {}
     result.setdefault("list", [])
     for item in data:
