@@ -1,163 +1,176 @@
-var Lat,Lng,currentTemp;
+var Lat, Lng, currentTemp;
+
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
         results = regex.exec(location.search);
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
-function setd3(){
-                       // Set the dimensions of the canvas / graph
-                    var margin = {
-                            top: 30,
-                            right: 80,
-                            bottom: 30,
-                            left: 50
-                        },
-                        width = 600 - margin.left - margin.right,
-                        height = 270 - margin.top - margin.bottom;
 
-                    // Parse the date / time
-                    var parseDate = d3.time.format("%Y/%m/%d %H:%M").parse;
+function setd3() {
+    // Set the dimensions of the canvas / graph
+    var margin = {
+            top: 30,
+            right: 80,
+            bottom: 30,
+            left: 50
+        },
+        width = 600 - margin.left - margin.right,
+        height = 270 - margin.top - margin.bottom;
 
-                    // Set the ranges
-                    var x = d3.time.scale().range([0, width]);
-                    var y = d3.scale.linear().range([height, 0]);
-                    var y2 = d3.scale.linear().range([height, 0]);
-                    // Define the axes
-                    var xAxis = d3.svg.axis().scale(x)
-                        .orient("bottom").ticks(5).tickFormat(d3.time.format("%m/%d %H:%M"));
+    // Parse the date / time
+    var parseDate = d3.time.format("%Y/%m/%d %H:%M").parse;
 
-                    var yAxis = d3.svg.axis().scale(y)
-                        .orient("left").ticks(5);
+    // Set the ranges
+    var x = d3.time.scale().range([0, width]);
+    var y = d3.scale.linear().range([height, 0]);
+    var y2 = d3.scale.linear().range([height, 0]);
+    // Define the axes
+    var xAxis = d3.svg.axis().scale(x)
+        .orient("bottom").ticks(5).tickFormat(d3.time.format("%m/%d %H:%M"));
 
-                    // Define the line
-                    var templine = d3.svg.line()
-                        .x(function(d) {
-                            return x(d.date);
-                        })
-                        .y(function(d) {
-                            return y(d.t1);
-                        });
+    var yAxis = d3.svg.axis().scale(y)
+        .orient("left").ticks(5);
 
-                    var humiline = d3.svg.line()
-                        .x(function(d) {
-                            return x(d.date);
-                        })
-                        .y(function(d) {
-                            return y2(d.h1);
-                        });
-                    // var zeroline = d3.svg.line()
-                    //     .x(function(d) {
-                    //         return 0;
-                    //     })
-                    //     .y(function(d) {
-                    //         return 0;
-                    //     });
+    // Define the line
+    var templine = d3.svg.line()
+        .x(function(d) {
+            return x(d.date);
+        })
+        .y(function(d) {
+            return y(d.t1);
+        });
 
-                    // Adds the svg canvas
-                    var svg = d3.select("#svg-container")
-                        .append("svg")
-                        .attr('id','svg-chart')
-                        .attr("width", width + margin.left + margin.right)
-                        .attr("height", height + margin.top + margin.bottom)
-                        .attr("viewBox","0 0 "+(width + margin.left + margin.right)+" "+(height + margin.top + margin.bottom))
-                        .append("g")
-                        .attr("transform",
-                            "translate(" + margin.left + "," + margin.top + ")");
-                    var chart = $("#svg-chart"),
-                        aspect = chart.width() / chart.height(),
-                        container = chart.parent();
-                    $(window).on("resize", function() {
-                        var targetWidth = container.width();
-                        chart.attr("width", targetWidth);
-                        chart.attr("height", Math.round(targetWidth / aspect));
-                    }).trigger("resize");
-                    // Get the data
-                    var node_id = getParameterByName('id');
-                    d3.json("http://ec2-50-16-55-61.compute-1.amazonaws.com/api/getdata/"+node_id, function(error, data) {
-                    // d3.json("http://127.0.0.1:8000/getdata/"+node_id, function(error, data) {
+    var humiline = d3.svg.line()
+        .x(function(d) {
+            return x(d.date);
+        })
+        .y(function(d) {
+            return y2(d.h1);
+        });
+    // var zeroline = d3.svg.line()
+    //     .x(function(d) {
+    //         return 0;
+    //     })
+    //     .y(function(d) {
+    //         return 0;
+    //     });
 
-                        if (error)
-                            return console.error(error);
-                        // console.log(data)
-                        data.list.forEach(function(d) {
+    // Adds the svg canvas
+    var svg = d3.select("#svg-container")
+        .append("svg")
+        .attr('id', 'svg-chart')
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .attr("viewBox", "0 0 " + (width + margin.left + margin.right) + " " + (height + margin.top + margin.bottom))
+        .append("g")
+        .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
+    var chart = $("#svg-chart"),
+        aspect = chart.width() / chart.height(),
+        container = chart.parent();
+    $(window).on("resize", function() {
+        var targetWidth = container.width();
+        chart.attr("width", targetWidth);
+        chart.attr("height", Math.round(targetWidth / aspect));
+    }).trigger("resize");
+    // Get the data
+    var node_id = getParameterByName('id');
+    $.blockUI({
+        css: {
+            border: 'none',
+            padding: '15px',
+            backgroundColor: '#000',
+            '-webkit-border-radius': '10px',
+            '-moz-border-radius': '10px',
+            opacity: .5,
+            color: '#fff'
+        }
+    });
+    d3.json("http://ec2-50-16-55-61.compute-1.amazonaws.com/api/getdata/" + node_id, function(error, data) {
+        // d3.json("http://127.0.0.1:8000/getdata/"+node_id, function(error, data) {
+               $.unblockUI();
+        if (error)
+            return console.error(error);
+        // console.log(data)
+        data.list.forEach(function(d) {
 
-                            d.date = parseDate(d.dt);
-                        });
-                        // console.log(data.list[data.list.length-1])
-                        var newestData=data.list[data.list.length-1]
-                        $('#label_updatedTime').html(newestData.dt)
-                        $('#label_updatedTemp').html(newestData.t1+'℃')
-                        $('#label_updatedHumi').html(newestData.h1+'%')
-                        Lat=newestData.lat
-                        Lng=newestData.lng
-                        currentTemp=newestData.t1
-
-
-                        // console.log(data.list)
-                        // Scale the range of the data
-                        x.domain(d3.extent(data.list, function(d) {
-                            return d.date;
-                        }));
-                        y.domain([d3.min(data.list, function(d) {
-                            return d.t1;
-                        })-2, d3.max(data.list, function(d) {
-                            return d.t1;
-                        })+2]);
-                        y2.domain([d3.min(data.list, function(d) {
-                            return d.h1;
-                        })-2, d3.max(data.list, function(d) {
-                            return d.h1;
-                        })+2]);
-                        svg.append("path")
-                            .attr("class", "line data1")
-                            .attr("d", templine(data.list));
-
-                        svg.append("path")
-                            .attr("class", "line data2")
-                            .attr("d", humiline(data.list));
+            d.date = parseDate(d.dt);
+        });
+        // console.log(data.list[data.list.length-1])
+        var newestData = data.list[data.list.length - 1]
+        $('#label_updatedTime').html(newestData.dt)
+        $('#label_updatedTemp').html(newestData.t1 + '℃')
+        $('#label_updatedHumi').html(newestData.h1 + '%')
+        Lat = newestData.lat
+        Lng = newestData.lng
+        currentTemp = newestData.t1
 
 
-                        // Add the X Axis
-                        svg.append("g")
-                            .attr("class", "x axis")
-                            .attr("transform", "translate(0," + height + ")")
-                            .call(xAxis);
+        // console.log(data.list)
+        // Scale the range of the data
+        x.domain(d3.extent(data.list, function(d) {
+            return d.date;
+        }));
+        y.domain([d3.min(data.list, function(d) {
+            return d.t1;
+        }) - 2, d3.max(data.list, function(d) {
+            return d.t1;
+        }) + 2]);
+        y2.domain([d3.min(data.list, function(d) {
+            return d.h1;
+        }) - 2, d3.max(data.list, function(d) {
+            return d.h1;
+        }) + 2]);
+        svg.append("path")
+            .attr("class", "line data1")
+            .attr("d", templine(data.list));
 
-                        // Add the Y Axis
-                        svg.append("g")
-                            .attr("class", "y axis axisLeft")
-                            .call(yAxis);
-                        var yAxisRight = d3.svg.axis().scale(y2).ticks(6).orient("right");
-                        // Add the y-axis to the right
-                        svg.append("svg:g")
-                            .attr("class", "y axis axisRight")
-                            .attr("transform", "translate(" + (width + 15) + ",0)")
-                            .call(yAxisRight);
+        svg.append("path")
+            .attr("class", "line data2")
+            .attr("d", humiline(data.list));
 
-                        setMap();
-                    });
-                    svg.append("text")
-                            .attr("transform", "rotate(-90)")
-                            .attr("y", 0 - margin.left)
-                            .attr("x", 0 - (height / 2))
-                            .attr("dy", "1em")
-                            .style("text-anchor", "middle")
-                            .text("tempareture");
-                    svg.append("text")
-                        .attr("transform", "rotate(-90)")
-                        .attr("y", margin.left+width)
-                        .attr("x", 0-(height / 2))
-                        .attr("dy", "1em")
-                        .style("text-anchor", "middle")
-                        .text("humidity");
-                        // console.log(Lat)
+
+        // Add the X Axis
+        svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis);
+
+        // Add the Y Axis
+        svg.append("g")
+            .attr("class", "y axis axisLeft")
+            .call(yAxis);
+        var yAxisRight = d3.svg.axis().scale(y2).ticks(6).orient("right");
+        // Add the y-axis to the right
+        svg.append("svg:g")
+            .attr("class", "y axis axisRight")
+            .attr("transform", "translate(" + (width + 15) + ",0)")
+            .call(yAxisRight);
+
+        setMap();
+    });
+    svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left)
+        .attr("x", 0 - (height / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("tempareture");
+    svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", margin.left + width)
+        .attr("x", 0 - (height / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("humidity");
+    // console.log(Lat)
 }
 
-function setMap(){
-       var myOptions = {
+function setMap() {
+    var myOptions = {
         zoom: 13,
-        center: new google.maps.LatLng(Lat,Lng),
+        center: new google.maps.LatLng(Lat, Lng),
         streetViewControl: false,
         scaleControl: true,
         zoomControl: true,
@@ -384,7 +397,7 @@ function setMap(){
     var marker = new google.maps.Marker({
         position: new google.maps.LatLng(Lat, Lng),
         map: map,
-        icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld='+Math.round(currentTemp)+'|FF0000|000000'
+        icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + Math.round(currentTemp) + '|FF0000|000000'
     });
 }
 
