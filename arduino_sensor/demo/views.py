@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from demo.models import Arduino_data, Setting, nodeData
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse,HttpResponseRedirect
 # Create your views here.
 from urllib.request import urlopen
 import urllib.error
@@ -12,23 +12,8 @@ from urllib.parse import urlparse
 from django.views.decorators.csrf import csrf_exempt
 import os
 from django.conf import settings
+from django.contrib import auth
 
-
-# def getJsonTest(request):
-#     t = '''{"result":[{"datetime":"2014/01/01","temp":24,"humidity":30},
-# {"datetime":"2014/01/02","temp":24,"humidity":44},
-# {"datetime":"2014/01/03","temp":22,"humidity":30},
-# {"datetime":"2014/01/04","temp":21,"humidity":55},
-# {"datetime":"2014/01/05","temp":20,"humidity":35},
-# {"datetime":"2014/01/06","temp":23,"humidity":32},
-# {"datetime":"2014/01/07","temp":22,"humidity":35},
-# {"datetime":"2014/01/08","temp":25,"humidity":69},
-# {"datetime":"2014/01/09","temp":27,"humidity":30},
-# {"datetime":"2014/01/10","temp":30,"humidity":72},
-# {"datetime":"2014/01/11","temp":23,"humidity":30}]}'''
-#     response = HttpResponse(t)
-#     response['access-control-allow-origin'] = '*'
-#     return response
 
 
 def getJsonTest(request):
@@ -78,6 +63,7 @@ def getData(request, id):
     # data = nodeData.objects.filter(
     #     userID_id=id).order_by('-created_at')[:10]
     data = nodeData.objects.filter(node_id=id).order_by('-dt')[:100][::-1]
+
     result = {}
     result.setdefault("list", [])
     for item in data:

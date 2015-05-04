@@ -1,4 +1,8 @@
 var Lat, Lng, currentTemp;
+var user_item;
+var favid = 0;
+var serverurl = 'http://ec2-50-16-55-61.compute-1.amazonaws.com/'
+// var serverurl = 'http://cloudsan.com:8000/'
 
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -87,21 +91,29 @@ function setd3() {
             color: '#fff'
         }
     });
-    d3.json("http://ec2-50-16-55-61.compute-1.amazonaws.com/api/getdata/" + node_id, function(error, data) {
-        // d3.json("http://127.0.0.1:8000/getdata/"+node_id, function(error, data) {
-               $.unblockUI();
+    var token = null;
+    if (user_item != null) {
+        token = 'Token ' + user_item.token;
+    }
+    // d3.json("http://ec2-50-16-55-61.compute-1.amazonaws.com/api/getdata/" + node_id, function(error, data) {
+    d3.json(serverurl+"account/node/" + node_id).header('Authorization', token).get(function(error, data) {
+        $.unblockUI();
         if (error)
             return console.error(error);
         // console.log(data)
-        data.list.forEach(function(d) {
+        data.forEach(function(d) {
 
             d.date = parseDate(d.dt);
         });
         // console.log(data.list[data.list.length-1])
-        var newestData = data.list[data.list.length - 1]
+        var newestData = data[data.length - 1]
         $('#label_updatedTime').html(newestData.dt)
         $('#label_updatedTemp').html(newestData.t1 + '℃')
         $('#label_updatedHumi').html(newestData.h1 + '%')
+        var title = newestData.node_name+'(node id:'+newestData.node+')';
+        $('#titleh1').html(title);
+
+
         Lat = newestData.lat
         Lng = newestData.lng
         currentTemp = newestData.t1
@@ -109,26 +121,26 @@ function setd3() {
 
         // console.log(data.list)
         // Scale the range of the data
-        x.domain(d3.extent(data.list, function(d) {
+        x.domain(d3.extent(data, function(d) {
             return d.date;
         }));
-        y.domain([d3.min(data.list, function(d) {
+        y.domain([d3.min(data, function(d) {
             return d.t1;
-        }) - 2, d3.max(data.list, function(d) {
+        }) - 2, d3.max(data, function(d) {
             return d.t1;
         }) + 2]);
-        y2.domain([d3.min(data.list, function(d) {
+        y2.domain([d3.min(data, function(d) {
             return d.h1;
-        }) - 2, d3.max(data.list, function(d) {
+        }) - 2, d3.max(data, function(d) {
             return d.h1;
         }) + 2]);
         svg.append("path")
             .attr("class", "line data1")
-            .attr("d", templine(data.list));
+            .attr("d", templine(data));
 
         svg.append("path")
             .attr("class", "line data2")
-            .attr("d", humiline(data.list));
+            .attr("d", humiline(data));
 
 
         // Add the X Axis
@@ -402,9 +414,101 @@ function setMap() {
 }
 
 $(document).ready(function($) {
+
+    var loginPromise = window.localStorage.getItem("loginPromise");
+    if (loginPromise != null) {
+
+        $('#btnAddFav').hide();
+        $('#btnRmFav').hide();
+        var user = JSON.parse(loginPromise);
+        user_item = user;
+        var node_id = getParameterByName('id');
+        var token = 'Token ' + user_item.token;
+        $.ajax({
+            // url: 'http://ec2-50-16-55-61.compute-1.amazonaws.com/api/getJsonTest',
+            headers: {
+                'Authorization': token
+            },
+            url: serverurl+"account/favorites/",
+            type: 'Get',
+            dataType: 'json',
+            success: function(data) {
+                    var fav = false;
+                    console.log(node_id);
+                    $.each(data, function(i, obj) {
+
+                        console.log(obj.target);
+                        if (obj.target == node_id) {
+                            favid = obj.id;
+                            fav = true;
+                            return false;
+                        }
+                    });
+                    $('#btnRmFav').on('click', function(event) {
+
+                        $('#btnRmFav').hide();
+                        $('#btnAddFav').show();
+                        removeFav(token);
+                    });
+                    $('#btnAddFav').on('click', function(event) {
+
+                        $('#btnAddFav').hide();
+                        $('#btnRmFav').show();
+                        addFav(token);
+
+                    });
+                    if (fav) {
+                        $('#btnAddFav').hide();
+                        $('#btnRmFav').show();
+
+
+                    } else {
+
+                        $('#btnAddFav').show();
+                        $('#btnRmFav').hide();
+
+                    }
+                    // console.log(fav);
+                }
+                // data: {param1: 'value1'},
+        });
+
+    } else {
+        $('#favDiv').hide();
+    }
     setd3();
 
-
-
-
 });
+
+function addFav(token) {
+    var node_id = getParameterByName('id');
+
+    $.ajax({
+        // url: 'http://ec2-50-16-55-61.compute-1.amazonaws.com/api/getJsonTest',
+        headers: {
+            'Authorization': token
+        },
+        url: serverurl+"account/favorites/",
+        type: 'Post',
+        data: {
+            'target': node_id
+        },
+        dataType: 'json',
+        success: function(data) {
+            console.log(data);
+            favid=data.id;
+        }
+    });
+}
+
+function removeFav(token) {
+    $.ajax({
+        // url: 'http://ec2-50-16-55-61.compute-1.amazonaws.com/api/getJsonTest',
+        headers: {
+            'Authorization': token
+        },
+        url: serverurl+"account/favorites/" + favid,
+        type: 'Delete',
+        dataType: 'json'
+    });
+}

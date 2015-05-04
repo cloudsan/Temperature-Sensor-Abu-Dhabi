@@ -2,6 +2,17 @@ from django.db import models
 
 # Create your models here.
 
+class Node(models.Model):
+    id= models.IntegerField(primary_key=True)
+    name=models.CharField(max_length=30)
+    description = models.TextField()
+    class Meta:
+        verbose_name = "Node"
+        verbose_name_plural = "Nodes"
+
+    def __str__(self):
+        return 'id:{0} name:{1}'.format(self.id,self.name)
+
 
 class Setting(models.Model):
     name = models.CharField(max_length=100)
@@ -20,7 +31,7 @@ class Arduino_data(models.Model):
 
 
 class nodeData(models.Model):
-    node_id = models.IntegerField()
+    node = models.ForeignKey(Node)
     t1 = models.FloatField(default=0)
     t2 = models.FloatField(default=0)
     h1 = models.FloatField(default=0)
