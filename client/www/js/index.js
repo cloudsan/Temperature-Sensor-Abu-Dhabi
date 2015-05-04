@@ -1,6 +1,6 @@
 var user_item = null;
 var map;
-var serverurl = 'ec2-50-16-55-61.compute-1.amazonaws.com'
+var serverurl = 'http://ec2-50-16-55-61.compute-1.amazonaws.com/'
 // var serverurl = 'http://cloudsan.com:8000/'
 
 function logout() {
