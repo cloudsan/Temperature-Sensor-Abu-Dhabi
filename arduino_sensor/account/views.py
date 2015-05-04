@@ -117,6 +117,11 @@ def register_by_access_token(request, backend):
     # Split by spaces and get the array
     auth = get_authorization_header(request).split()
 
+    if not auth:
+        msg= 'No auth provided'
+        return msg
+
+
     if not auth or auth[0].lower() != b'bearer':
         msg = 'No token header provided.'
         return msg
