@@ -152,7 +152,8 @@ class ObtainAuthToken(APIView):
         else:
             # Here we call PSA to authenticate like we would if we used PSA on server side.
             user = register_by_access_token(request, backend)
-
+            if isinstance(user, str):
+                return Response(user,status=500)
             # If user is active we get or create the REST token and send it back with user data
             if user and user.is_active:
                 token, created = Token.objects.get_or_create(user=user)
