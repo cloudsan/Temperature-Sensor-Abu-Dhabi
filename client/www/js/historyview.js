@@ -1,7 +1,7 @@
 var Lat, Lng, currentTemp;
 var user_item;
 var favid = 0;
-var serverurl = 'http://ec2-50-16-55-61.compute-1.amazonaws.com/'
+var serverurl = 'http://ec2-50-16-55-61.compute-1.amazonaws.com/api/'
 // var serverurl = 'http://cloudsan.com:8000/'
 
 function getParameterByName(name) {
