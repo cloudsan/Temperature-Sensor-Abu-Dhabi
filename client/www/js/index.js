@@ -24,7 +24,7 @@ function login() {
                     success: function(data) {
                         // console.log(loginPromise);
                         window.localStorage.setItem("loginPromise", JSON.stringify(data));
-                        window.location.reload();
+                        // window.location.reload();
                     }
                 });
 

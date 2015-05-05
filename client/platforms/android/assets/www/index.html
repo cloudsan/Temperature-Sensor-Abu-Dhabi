@@ -13,17 +13,18 @@
     <!-- Latest compiled JavaScript -->
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
-<script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+    <script type="text/javascript" src="js/openfb.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
-
-
+    <script type="text/javascript" src="js/jquery.blockui.js"></script>
+    <script src="cordova.js"></script>
     <script type="text/x-jquery-tmpl" id="hiddenTemplate">
-        <h2 id='h2_nodeID'>Node ID:${node_id}</h2>
+        <h2 id='h2_nodeID'>${node_name} (${node}) </h2>
         <!-- item list -->
         <div class="panel panel-default">
-            <div class="panel-heading"><a href="node_detail.html?id=${id}">${dt}</a></div>
+            <div class="panel-heading"><a href="node_detail.html?id=${node}">${dt}</a></div>
         </div>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate. Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan. Aliquam in felis sit amet augue.</p>
+        <p>${node_desc}</p>
         <hr>
     </script>
     <style type="text/css" media="screen">
@@ -110,11 +111,12 @@ author: bootply.com
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#">Home</a></li>
-                <li><a href="#">Link</a></li>
-                <li><a href="#">Link</a></li>
+                <li id='userlogin'><a href="#" onclick="login()">Login</a></li>
+                <li id='userinfo'><a href="#" >Hi</a></li>
+                <li id='userlogout'><a href="#" onclick="logout()">Logout</a></li>
                 <li>&nbsp;</li>
             </ul>
-            <form class="navbar-form">
+            <!-- <form class="navbar-form">
                 <div class="form-group" style="display:inline;">
                     <div class="input-group">
                         <div class="input-group-btn">
@@ -131,12 +133,16 @@ author: bootply.com
                         <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span> </span>
                     </div>
                 </div>
-            </form>
+            </form> -->
         </div>
     </div>
     <div id="map-canvas"></div>
     <div class="container-fluid" id="main">
         <div class="row">
+            <ul class="nav nav-tabs" id="lognav">
+                <li id='allLi' class="active"><a href="#" onclick='getAll()'>All</a></li>
+                <li id='favLi' ><a href="#" onclick='getFavorite()'>Favorite</a></li>
+            </ul>
             <div class="col-xs-6" id="left">
             </div>
         </div>
