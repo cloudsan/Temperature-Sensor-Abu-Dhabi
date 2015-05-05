@@ -24,7 +24,7 @@ function login() {
                     success: function(data) {
                         // console.log(loginPromise);
                         window.localStorage.setItem("loginPromise", JSON.stringify(data));
-                        // window.location.reload();
+                        window.location.reload();
                     }
                 });
 
@@ -33,7 +33,7 @@ function login() {
                 alert('Facebook login failed: ' + response.error);
             }
         }, {
-            scope: 'email,publish_stream'
+            scope: 'email,publish_actions'
         });
 }
 
