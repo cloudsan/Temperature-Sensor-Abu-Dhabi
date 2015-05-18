@@ -5,7 +5,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title></title>
     <!-- Latest compiled and minified CSS -->
     <title>Local Weather Information</title>
     <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css">
@@ -21,6 +20,8 @@
     <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript" src="js/jquery.blockui.js"></script>
     <script src="cordova.js"></script>
+    <script src="js/moment.js"></script>
+<script src="js/moment-timezone.min.js"></script>
     <script type="text/x-jquery-tmpl" id="hiddenTemplate">
         <h2 id='h2_nodeID'>${node_name} (${node}) </h2>
         <!-- item list -->
@@ -30,6 +31,11 @@
         <p>${node_desc}</p>
         <hr>
     </script>
+        <script type="text/javascript">
+    function toTimeZone(time) {
+    return moment(time).format('YYYY/MM/DD HH:mm');
+
+}</script>
     <style type="text/css" media="screen">
     /*
 A custom Bootstrap 3.1 theme from http://bootply.com\

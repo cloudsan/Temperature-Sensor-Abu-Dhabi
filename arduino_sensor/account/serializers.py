@@ -23,7 +23,7 @@ class FavoriteSerializer(serializers.ModelSerializer):
         fields = ('created','target','id','owner')
 
 class NodeDataSerializer(serializers.ModelSerializer):
-    dt = serializers.DateTimeField(format='%Y/%m/%d %H:%M')
+    dt = serializers.DateTimeField(format='iso-8601')
     node_name=serializers.ReadOnlyField(source='node.name')
     node_desc=serializers.ReadOnlyField(source='node.description')
 

@@ -32,6 +32,13 @@
     <script type="text/javascript" src="js/historyview.js">
     </script>
     <link rel="stylesheet" href="css/historyview.css"></link>
+    <script src="js/moment.js"></script>
+<script src="js/moment-timezone.min.js"></script>
+    <script type="text/javascript">
+    function toTimeZone(time) {
+
+    return moment(time).format('YYYY/MM/DD HH:mm');
+}</script>
 </head>
 
 <body>
