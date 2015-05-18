@@ -1,9 +1,28 @@
 var Lat, Lng, currentTemp;
 var user_item;
 var favid = 0;
-// var serverurl = 'http://ec2-50-16-55-61.compute-1.amazonaws.com/api/'
-var serverurl = 'http://cloudsan.com:8000/'
+var serverurl = 'http://ec2-50-16-55-61.compute-1.amazonaws.com/api/'
+// var serverurl = 'http://cloudsan.com:8000/'
+function checkLogin() {
+    // window.localStorage.removeItem("loginPromise");
+    var loginPromise = window.localStorage.getItem("loginPromise");
+    if (loginPromise != null) {
+        var user = JSON.parse(loginPromise);
+        user_item = user;
+        $('#userlogin').hide();
+        $('#userinfo').show();
+        $('#userinfo').html('<a href="#">Hi, ' + user.name + '</a>')
+        $('#userlogout').show();
+        $('#lognav').show();
+    } else {
+        $('#userlogin').show();
+        $('#userinfo').hide();
+        $('#userlogout').hide();
+        $('#lognav').hide();
+    }
 
+
+}
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -417,6 +436,7 @@ $(document).ready(function($) {
 
     var loginPromise = window.localStorage.getItem("loginPromise");
     $('.fb-share-button').attr('data-href',window.location.href);
+    checkLogin();
     if (loginPromise != null) {
 
         $('#btnAddFav').hide();
