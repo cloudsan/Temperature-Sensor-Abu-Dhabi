@@ -1,7 +1,7 @@
 var user_item = null;
 var map;
-var serverurl = 'http://ec2-50-16-55-61.compute-1.amazonaws.com/api/'
-// var serverurl = 'http://cloudsan.com:8000/'
+// var serverurl = 'http://ec2-50-16-55-61.compute-1.amazonaws.com/api/'
+var serverurl = 'http://cloudsan.com:8000/'
 
 function logout() {
     window.localStorage.removeItem("loginPromise");
@@ -33,7 +33,7 @@ function login() {
                 alert('Facebook login failed: ' + response.error);
             }
         }, {
-            scope: 'email,publish_stream'
+            scope: 'email,publish_actions'
         });
 }
 
@@ -142,6 +142,9 @@ function getNodeData(url, token) {
             $("#left").html('')
             if (data)
                 $.each(data, function(index, val) {
+                    console.log(val);
+                    val.dt = toTimeZone(val.dt);
+                    console.log(val);
                     appendList(val);
                     var marker = new google.maps.Marker({
                         position: new google.maps.LatLng(val['lat'], val['lng']),
@@ -152,7 +155,7 @@ function getNodeData(url, token) {
                     });
                     google.maps.event.addListener(marker, 'click', function() {
                         map.setCenter(marker.getPosition());
-                        window.open('node_detail.html?id=' + val['node_id'], 'detail')
+                        window.open('node_detail.html?id=' + val['node'], 'detail')
                     });
                 });
 

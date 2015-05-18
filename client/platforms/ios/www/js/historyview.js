@@ -1,150 +1,188 @@
-var Lat,Lng;
+var Lat, Lng, currentTemp;
+var user_item;
+var favid = 0;
+var serverurl = 'http://ec2-50-16-55-61.compute-1.amazonaws.com/api/'
+// var serverurl = 'http://cloudsan.com:8000/'
 
-function setd3(){
-                       // Set the dimensions of the canvas / graph
-                    var margin = {
-                            top: 30,
-                            right: 80,
-                            bottom: 30,
-                            left: 50
-                        },
-                        width = 600 - margin.left - margin.right,
-                        height = 270 - margin.top - margin.bottom;
-
-                    // Parse the date / time
-                    var parseDate = d3.time.format("%Y/%m/%d %H:%M").parse;
-
-                    // Set the ranges
-                    var x = d3.time.scale().range([0, width]);
-                    var y = d3.scale.linear().range([height, 0]);
-                    var y2 = d3.scale.linear().range([height, 0]);
-                    // Define the axes
-                    var xAxis = d3.svg.axis().scale(x)
-                        .orient("bottom").ticks(5).tickFormat(d3.time.format("%m/%d"));
-
-                    var yAxis = d3.svg.axis().scale(y)
-                        .orient("left").ticks(5);
-
-                    // Define the line
-                    var templine = d3.svg.line()
-                        .x(function(d) {
-                            return x(d.date);
-                        })
-                        .y(function(d) {
-                            return y(d.t1);
-                        });
-
-                    var humiline = d3.svg.line()
-                        .x(function(d) {
-                            return x(d.date);
-                        })
-                        .y(function(d) {
-                            return y2(d.h1);
-                        });
-                    var zeroline = d3.svg.line()
-                        .x(function(d) {
-                            return 0;
-                        })
-                        .y(function(d) {
-                            return 0;
-                        });
-
-                    // Adds the svg canvas
-                    var svg = d3.select("#svg-container")
-                        .append("svg")
-                        .attr('id','svg-chart')
-                        .attr("width", width + margin.left + margin.right)
-                        .attr("height", height + margin.top + margin.bottom)
-                        .attr("viewBox","0 0 "+(width + margin.left + margin.right)+" "+(height + margin.top + margin.bottom))
-                        .append("g")
-                        .attr("transform",
-                            "translate(" + margin.left + "," + margin.top + ")");
-                    var chart = $("#svg-chart"),
-                        aspect = chart.width() / chart.height(),
-                        container = chart.parent();
-                    $(window).on("resize", function() {
-                        var targetWidth = container.width();
-                        chart.attr("width", targetWidth);
-                        chart.attr("height", Math.round(targetWidth / aspect));
-                    }).trigger("resize");
-                    // Get the data
-                    d3.json("http://ec2-54-148-238-83.us-west-2.compute.amazonaws.com/api/getdata", function(error, data) {
-                        if (error)
-                            return console.error(error);
-                        // console.log(data)
-                        data.list.forEach(function(d) {
-
-                            d.date = parseDate(d.dt);
-                        });
-                        // console.log(data.list[data.list.length-1])
-                        var newestData=data.list[data.list.length-1]
-                        $('#label_updatedTime').html(newestData.dt)
-                        $('#label_updatedTemp').html(newestData.t1+'℃')
-                        $('#label_updatedHumi').html(newestData.h1+'%')
-                        Lat=newestData.lat
-                        Lng=newestData.lng
-
-
-                        // console.log(data.list)
-                        // Scale the range of the data
-                        x.domain(d3.extent(data.list, function(d) {
-                            return d.date;
-                        }));
-                        y.domain([0, d3.max(data.list, function(d) {
-                            return d.t1;
-                        })]);
-                        y2.domain([0, d3.max(data.list, function(d) {
-                            return d.h1;
-                        })]);
-                        svg.append("path")
-                            .attr("class", "line data1")
-                            .attr("d", templine(data.list));
-
-                        svg.append("path")
-                            .attr("class", "line data2")
-                            .attr("d", humiline(data.list));
-
-
-                        // Add the X Axis
-                        svg.append("g")
-                            .attr("class", "x axis")
-                            .attr("transform", "translate(0," + height + ")")
-                            .call(xAxis);
-
-                        // Add the Y Axis
-                        svg.append("g")
-                            .attr("class", "y axis axisLeft")
-                            .call(yAxis);
-                        var yAxisRight = d3.svg.axis().scale(y2).ticks(6).orient("right");
-                        // Add the y-axis to the right
-                        svg.append("svg:g")
-                            .attr("class", "y axis axisRight")
-                            .attr("transform", "translate(" + (width + 15) + ",0)")
-                            .call(yAxisRight);
-
-                        setMap();
-                    });
-                    svg.append("text")
-                            .attr("transform", "rotate(-90)")
-                            .attr("y", 0 - margin.left)
-                            .attr("x", 0 - (height / 2))
-                            .attr("dy", "1em")
-                            .style("text-anchor", "middle")
-                            .text("tempareture");
-                    svg.append("text")
-                        .attr("transform", "rotate(-90)")
-                        .attr("y", margin.left+width)
-                        .attr("x", 0-(height / 2))
-                        .attr("dy", "1em")
-                        .style("text-anchor", "middle")
-                        .text("humidity");
-                        // console.log(Lat)
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
-function setMap(){
-       var myOptions = {
+function setd3() {
+    // Set the dimensions of the canvas / graph
+    var margin = {
+            top: 30,
+            right: 80,
+            bottom: 30,
+            left: 50
+        },
+        width = 600 - margin.left - margin.right,
+        height = 270 - margin.top - margin.bottom;
+
+    // Parse the date / time
+    var parseDate = d3.time.format("%Y/%m/%d %H:%M").parse;
+
+    // Set the ranges
+    var x = d3.time.scale().range([0, width]);
+    var y = d3.scale.linear().range([height, 0]);
+    var y2 = d3.scale.linear().range([height, 0]);
+    // Define the axes
+    var xAxis = d3.svg.axis().scale(x)
+        .orient("bottom").ticks(5).tickFormat(d3.time.format("%m/%d %H:%M"));
+
+    var yAxis = d3.svg.axis().scale(y)
+        .orient("left").ticks(5);
+
+    // Define the line
+    var templine = d3.svg.line()
+        .x(function(d) {
+            return x(d.date);
+        })
+        .y(function(d) {
+            return y(d.t1);
+        });
+
+    var humiline = d3.svg.line()
+        .x(function(d) {
+            return x(d.date);
+        })
+        .y(function(d) {
+            return y2(d.h1);
+        });
+    // var zeroline = d3.svg.line()
+    //     .x(function(d) {
+    //         return 0;
+    //     })
+    //     .y(function(d) {
+    //         return 0;
+    //     });
+
+    // Adds the svg canvas
+    var svg = d3.select("#svg-container")
+        .append("svg")
+        .attr('id', 'svg-chart')
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .attr("viewBox", "0 0 " + (width + margin.left + margin.right) + " " + (height + margin.top + margin.bottom))
+        .append("g")
+        .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
+    var chart = $("#svg-chart"),
+        aspect = chart.width() / chart.height(),
+        container = chart.parent();
+    $(window).on("resize", function() {
+        var targetWidth = container.width();
+        chart.attr("width", targetWidth);
+        chart.attr("height", Math.round(targetWidth / aspect));
+    }).trigger("resize");
+    // Get the data
+    var node_id = getParameterByName('id');
+    $.blockUI({
+        css: {
+            border: 'none',
+            padding: '15px',
+            backgroundColor: '#000',
+            '-webkit-border-radius': '10px',
+            '-moz-border-radius': '10px',
+            opacity: .5,
+            color: '#fff'
+        }
+    });
+    var token = null;
+    if (user_item != null) {
+        token = 'Token ' + user_item.token;
+    }
+    // d3.json("http://ec2-50-16-55-61.compute-1.amazonaws.com/api/getdata/" + node_id, function(error, data) {
+    d3.json(serverurl+"account/node/" + node_id).header('Authorization', token).get(function(error, data) {
+        $.unblockUI();
+        if (error)
+            return console.error(error);
+        // console.log(data)
+        data.forEach(function(d) {
+
+            d.date = parseDate(d.dt);
+        });
+        // console.log(data.list[data.list.length-1])
+        var newestData = data[data.length - 1]
+        $('#label_updatedTime').html(newestData.dt)
+        $('#label_updatedTemp').html(newestData.t1 + '℃')
+        $('#label_updatedHumi').html(newestData.h1 + '%')
+        var title = newestData.node_name+'(node id:'+newestData.node+')';
+        $('#titleh1').html(title);
+
+
+        Lat = newestData.lat
+        Lng = newestData.lng
+        currentTemp = newestData.t1
+
+
+        // console.log(data.list)
+        // Scale the range of the data
+        x.domain(d3.extent(data, function(d) {
+            return d.date;
+        }));
+        y.domain([d3.min(data, function(d) {
+            return d.t1;
+        }) - 2, d3.max(data, function(d) {
+            return d.t1;
+        }) + 2]);
+        y2.domain([d3.min(data, function(d) {
+            return d.h1;
+        }) - 2, d3.max(data, function(d) {
+            return d.h1;
+        }) + 2]);
+        svg.append("path")
+            .attr("class", "line data1")
+            .attr("d", templine(data));
+
+        svg.append("path")
+            .attr("class", "line data2")
+            .attr("d", humiline(data));
+
+
+        // Add the X Axis
+        svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis);
+
+        // Add the Y Axis
+        svg.append("g")
+            .attr("class", "y axis axisLeft")
+            .call(yAxis);
+        var yAxisRight = d3.svg.axis().scale(y2).ticks(6).orient("right");
+        // Add the y-axis to the right
+        svg.append("svg:g")
+            .attr("class", "y axis axisRight")
+            .attr("transform", "translate(" + (width + 15) + ",0)")
+            .call(yAxisRight);
+
+        setMap();
+    });
+    svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left)
+        .attr("x", 0 - (height / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("tempareture");
+    svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", margin.left + width)
+        .attr("x", 0 - (height / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("humidity");
+    // console.log(Lat)
+}
+
+function setMap() {
+    var myOptions = {
         zoom: 13,
-        center: new google.maps.LatLng(24.4281988, 54.6231222),
+        center: new google.maps.LatLng(Lat, Lng),
         streetViewControl: false,
         scaleControl: true,
         zoomControl: true,
@@ -361,22 +399,116 @@ function setMap(){
         styles: stylesArray
     });
 
-    var image = {
-        url: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=25|FF0000|000000',
-        // This marker is 20 pixels wide by 32 pixels tall.
-        size: new google.maps.Size(20, 32),
-    };
+    // var image = {
+    //     url: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=25|FF0000|000000',
+    //     // This marker is 20 pixels wide by 32 pixels tall.
+    //     size: new google.maps.Size(20, 32),
+    // };
+
+
     var marker = new google.maps.Marker({
         position: new google.maps.LatLng(Lat, Lng),
         map: map,
-        icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=25|FF0000|000000'
+        icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + Math.round(currentTemp) + '|FF0000|000000'
     });
 }
 
 $(document).ready(function($) {
+
+    var loginPromise = window.localStorage.getItem("loginPromise");
+    if (loginPromise != null) {
+
+        $('#btnAddFav').hide();
+        $('#btnRmFav').hide();
+        var user = JSON.parse(loginPromise);
+        user_item = user;
+        var node_id = getParameterByName('id');
+        var token = 'Token ' + user_item.token;
+        $.ajax({
+            // url: 'http://ec2-50-16-55-61.compute-1.amazonaws.com/api/getJsonTest',
+            headers: {
+                'Authorization': token
+            },
+            url: serverurl+"account/favorites/",
+            type: 'Get',
+            dataType: 'json',
+            success: function(data) {
+                    var fav = false;
+                    console.log(node_id);
+                    $.each(data, function(i, obj) {
+
+                        console.log(obj.target);
+                        if (obj.target == node_id) {
+                            favid = obj.id;
+                            fav = true;
+                            return false;
+                        }
+                    });
+                    $('#btnRmFav').on('click', function(event) {
+
+                        $('#btnRmFav').hide();
+                        $('#btnAddFav').show();
+                        removeFav(token);
+                    });
+                    $('#btnAddFav').on('click', function(event) {
+
+                        $('#btnAddFav').hide();
+                        $('#btnRmFav').show();
+                        addFav(token);
+
+                    });
+                    if (fav) {
+                        $('#btnAddFav').hide();
+                        $('#btnRmFav').show();
+
+
+                    } else {
+
+                        $('#btnAddFav').show();
+                        $('#btnRmFav').hide();
+
+                    }
+                    // console.log(fav);
+                }
+                // data: {param1: 'value1'},
+        });
+
+    } else {
+        $('#favDiv').hide();
+    }
     setd3();
 
-
-
-
 });
+
+function addFav(token) {
+    var node_id = getParameterByName('id');
+
+    $.ajax({
+        // url: 'http://ec2-50-16-55-61.compute-1.amazonaws.com/api/getJsonTest',
+        headers: {
+            'Authorization': token
+        },
+        url: serverurl+"account/favorites/",
+        type: 'Post',
+        data: {
+            'target': node_id
+        },
+        dataType: 'json',
+        success: function(data) {
+            console.log(data);
+            favid=data.id;
+        }
+    });
+}
+
+function removeFav(token) {
+    $.ajax({
+        // url: 'http://ec2-50-16-55-61.compute-1.amazonaws.com/api/getJsonTest',
+        headers: {
+            'Authorization': token
+        },
+        url: serverurl+"account/favorites/" + favid,
+        type: 'Delete',
+        dataType: 'json'
+    });
+}
