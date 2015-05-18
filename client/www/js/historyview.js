@@ -1,8 +1,8 @@
 var Lat, Lng, currentTemp;
 var user_item;
 var favid = 0;
-var serverurl = 'http://ec2-50-16-55-61.compute-1.amazonaws.com/api/'
-// var serverurl = 'http://cloudsan.com:8000/'
+// var serverurl = 'http://ec2-50-16-55-61.compute-1.amazonaws.com/api/'
+var serverurl = 'http://cloudsan.com:8000/'
 
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -416,6 +416,7 @@ function setMap() {
 $(document).ready(function($) {
 
     var loginPromise = window.localStorage.getItem("loginPromise");
+    $('.fb-share-button').attr('data-href',window.location.href);
     if (loginPromise != null) {
 
         $('#btnAddFav').hide();
