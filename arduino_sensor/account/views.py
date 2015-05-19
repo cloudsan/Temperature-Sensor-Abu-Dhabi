@@ -136,6 +136,7 @@ def register_by_access_token(request, backend):
 
     return user
 
+@csrf_exempt
 class ObtainAuthToken(APIView):
     throttle_classes = ()
     permission_classes = ()
@@ -163,6 +164,7 @@ class ObtainAuthToken(APIView):
             if user and user.is_active:
                 token, created = Token.objects.get_or_create(user=user)
                 return Response({'id': user.id , 'name': user.username, 'userRole': 'user','token': token.key})
+
 
 class ObtainLogout(APIView):
     throttle_classes = ()
