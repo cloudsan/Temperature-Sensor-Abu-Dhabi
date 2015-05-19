@@ -39,7 +39,7 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 
 CORS_ORIGIN_ALLOW_ALL = True
 ALLOWED_HOSTS = []
-
+REST_SESSION_LOGIN = False
 
 # Application definition
 
