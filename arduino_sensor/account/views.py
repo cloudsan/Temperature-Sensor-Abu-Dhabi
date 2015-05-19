@@ -136,7 +136,6 @@ def register_by_access_token(request, backend):
 
     return user
 
-@csrf_exempt
 class ObtainAuthToken(APIView):
     throttle_classes = ()
     permission_classes = ()
