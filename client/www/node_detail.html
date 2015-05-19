@@ -33,13 +33,14 @@
     </script>
     <link rel="stylesheet" href="css/historyview.css"></link>
     <script src="js/moment.js"></script>
-<script src="js/moment-timezone.min.js"></script>
+    <script src="js/moment-timezone.min.js"></script>
     <script type="text/javascript">
     function toTimeZone(time) {
 
-    return moment(time).format('YYYY/MM/DD HH:mm');
-}</script>
-<style type="text/css" media="screen">
+        return moment(time).format('YYYY/MM/DD HH:mm');
+    }
+    </script>
+    <style type="text/css" media="screen">
     /*
 A custom Bootstrap 3.1 theme from http://bootply.com\
 
@@ -98,19 +99,12 @@ author: bootply.com
         height: 100%;
     }
 
-    #map-canvas {
-        width: 50%;
-        height: calc(100% - 0);
-        position: absolute;
-        right: 0px;
-        top: 50px;
-        bottom: 0;
-        overflow: hidden;
-    }
+
     </style>
 </head>
 
-<body><div class="navbar navbar-custom navbar-fixed-top">
+<body>
+    <div class="navbar navbar-custom navbar-fixed-top">
         <div class="navbar-header"><a class="navbar-brand" href="#">Local Weather Information - Masdar</a>
             <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="icon-bar"></span>
@@ -122,7 +116,7 @@ author: bootply.com
             <ul class="nav navbar-nav">
                 <li class="active"><a href="http://ec2-50-16-55-61.compute-1.amazonaws.com">Home</a></li>
                 <li id='userlogin'><a href="#" onclick="login()">Login</a></li>
-                <li id='userinfo'><a href="#" >Hi</a></li>
+                <li id='userinfo'><a href="#">Hi</a></li>
                 <li id='userlogout'><a href="#" onclick="logout()">Logout</a></li>
                 <li>&nbsp;</li>
             </ul>
@@ -146,21 +140,25 @@ author: bootply.com
             </form> -->
         </div>
     </div>
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.3&appId=1007553055921839";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
+    <div id="fb-root"></div>
+    <script>
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.3&appId=1007553055921839";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+    </script>
     <div id="wrapper">
         <!-- Navigation -->
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header" id='titleh1'></h1><div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button"></div>
-<h1 id="favDiv">
+                    <h1 class="page-header" id='titleh1'></h1>
+                    <div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button"></div>
+                    <h1 id="favDiv">
                         <button id="btnAddFav" type="button" class="btn btn-primary">add to Favorite</button>
                         <button id="btnRmFav" type="button"  class="btn btn-primary">Favorited</button>
 </h1>
