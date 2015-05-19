@@ -93,7 +93,7 @@ class NodeDataDetail(generics.ListAPIView):
     serializer_class = NodeDataSerializer
     def get_queryset(self):
         node_id = self.kwargs.get("id")
-        return nodeData.objects.filter(node_id = node_id).order_by('-dt')[:100][::-1]
+        return nodeData.objects.filter(node_id = node_id).order_by('-dt')[:50][::-1]
 
 class FavoriteDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsOwner,)
