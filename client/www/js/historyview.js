@@ -129,7 +129,7 @@ function setd3() {
         $('#label_updatedTime').html(toTimeZone(newestData.dt));
         $('#label_updatedTemp').html(newestData.t1 + '℃');
         $('#label_updatedHumi').html(newestData.h1 + '%')
-        var title = newestData.node_name+'(node id:'+newestData.node+')';
+        var title = newestData.node_name;
         $('#titleh1').html(title);
 
 
