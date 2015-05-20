@@ -467,7 +467,9 @@ function setMap() {
 }
 
 $(document).ready(function($) {
-
+    openFB.init({
+        appId: '1007553055921839'
+    });
     var loginPromise = window.localStorage.getItem("loginPromise");
     $('.fb-share-button').attr('data-href',window.location.href);
     checkLogin();
