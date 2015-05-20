@@ -3,7 +3,26 @@ var user_item;
 var favid = 0;
 var serverurl = 'http://ec2-50-16-55-61.compute-1.amazonaws.com/api/'
 // var serverurl = 'http://cloudsan.com:8000/'
+function checkLogin() {
+    // window.localStorage.removeItem("loginPromise");
+    var loginPromise = window.localStorage.getItem("loginPromise");
+    if (loginPromise != null) {
+        var user = JSON.parse(loginPromise);
+        user_item = user;
+        $('#userlogin').hide();
+        $('#userinfo').show();
+        $('#userinfo').html('<a href="#">Hi, ' + user.name + '</a>')
+        $('#userlogout').show();
+        $('#lognav').show();
+    } else {
+        $('#userlogin').show();
+        $('#userinfo').hide();
+        $('#userlogout').hide();
+        $('#lognav').hide();
+    }
 
+
+}
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -103,14 +122,14 @@ function setd3() {
         // console.log(data)
         data.forEach(function(d) {
 
-            d.date = parseDate(d.dt);
+            d.date = parseDate(toTimeZone(d.dt));
         });
         // console.log(data.list[data.list.length-1])
         var newestData = data[data.length - 1]
-        $('#label_updatedTime').html(newestData.dt)
-        $('#label_updatedTemp').html(newestData.t1 + '℃')
+        $('#label_updatedTime').html(toTimeZone(newestData.dt));
+        $('#label_updatedTemp').html(newestData.t1 + '℃');
         $('#label_updatedHumi').html(newestData.h1 + '%')
-        var title = newestData.node_name+'(node id:'+newestData.node+')';
+        var title = newestData.node_name;
         $('#titleh1').html(title);
 
 
@@ -416,6 +435,8 @@ function setMap() {
 $(document).ready(function($) {
 
     var loginPromise = window.localStorage.getItem("loginPromise");
+    $('.fb-share-button').attr('data-href',window.location.href);
+    checkLogin();
     if (loginPromise != null) {
 
         $('#btnAddFav').hide();

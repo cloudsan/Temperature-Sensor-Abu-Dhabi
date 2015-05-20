@@ -7,6 +7,8 @@ Directory Structure
 |   +-- demo: node related code
 +-- client: website and andriod app build in cordova
 +-- www: user document website
++-- arduino_code: code for arduino
+
 
 
 

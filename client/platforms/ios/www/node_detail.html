@@ -8,7 +8,9 @@
     <meta name="description" content="">
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <meta name="author" content="">
-    <title>SB Admin 2 - Bootstrap Admin Theme</title>
+    <title>Local Weather Information</title>
+    <meta property="og:title" content="Local Weather Information" />
+    <meta property="og:description" content="On the home page of Local Weather Information, you can find the weather information of most popular spots in your local area. Let's go out and enjoy the Summer" />
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css">
     <!-- MetisMenu CSS -->
@@ -30,16 +32,133 @@
     <script type="text/javascript" src="js/historyview.js">
     </script>
     <link rel="stylesheet" href="css/historyview.css"></link>
+    <script src="js/moment.js"></script>
+    <script src="js/moment-timezone.min.js"></script>
+    <script type="text/javascript">
+    function toTimeZone(time) {
+
+        return moment(time).format('YYYY/MM/DD HH:mm');
+    }
+    </script>
+    <style type="text/css" media="screen">
+    /*
+A custom Bootstrap 3.1 theme from http://bootply.com\
+
+This CSS code should follow the 'bootstrap.css'
+in your HTML file.
+
+license: MIT
+author: bootply.com
+*/
+
+    html,
+    body {
+        height: 100%;
+    }
+
+    body {
+        padding-top: 50px;
+        /*padding for navbar*/
+    }
+
+    .navbar-custom .icon-bar {
+        background-color: #fff;
+    }
+
+    .navbar-custom {
+        background-color: #168ccc;
+        color: #fff;
+    }
+
+    .navbar-custom li>a:hover,
+    .navbar-custom li>a:focus {
+        background-color: #49bfff;
+    }
+
+    .navbar-custom a {
+        color: #fefefe;
+    }
+
+    .navbar-custom .form-control:focus {
+        border-color: #49bfff;
+        outline: 0;
+        -webkit-box-shadow: inset 0 0 0;
+        box-shadow: inset 0 0 0;
+    }
+
+    #main,
+    #main>.row {
+        height: 100%;
+    }
+
+    #main>.row {
+        overflow-y: scroll;
+    }
+
+    #left {
+        height: 100%;
+    }
+
+
+    </style>
 </head>
 
 <body>
+    <div class="navbar navbar-custom navbar-fixed-top">
+        <div class="navbar-header"><a class="navbar-brand" href="#">Local Weather Information - Masdar</a>
+            <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="http://ec2-50-16-55-61.compute-1.amazonaws.com">Home</a></li>
+                <li id='userlogin'><a href="#" onclick="login()">Login</a></li>
+                <li id='userinfo'><a href="#">Hi</a></li>
+                <li id='userlogout'><a href="#" onclick="logout()">Logout</a></li>
+                <li>&nbsp;</li>
+            </ul>
+            <!-- <form class="navbar-form">
+                <div class="form-group" style="display:inline;">
+                    <div class="input-group">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-chevron-down"></span></button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Category 1</a></li>
+                                <li><a href="#">Category 2</a></li>
+                                <li><a href="#">Category 3</a></li>
+                                <li><a href="#">Category 4</a></li>
+                                <li><a href="#">Category 5</a></li>
+                            </ul>
+                        </div>
+                        <input type="text" class="form-control" placeholder="What are searching for?">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span> </span>
+                    </div>
+                </div>
+            </form> -->
+        </div>
+    </div>
+    <div id="fb-root"></div>
+    <script>
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.3&appId=1007553055921839";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+    </script>
     <div id="wrapper">
         <!-- Navigation -->
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header" id='titleh1'></h1>
-<h1 id="favDiv">
+                    <div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button"></div>
+                    <h1 id="favDiv">
                         <button id="btnAddFav" type="button" class="btn btn-primary">add to Favorite</button>
                         <button id="btnRmFav" type="button"  class="btn btn-primary">Favorited</button>
 </h1>
