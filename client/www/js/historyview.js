@@ -84,7 +84,7 @@ function setd3() {
     var y2 = d3.scale.linear().range([height, 0]);
     // Define the axes
     var xAxis = d3.svg.axis().scale(x)
-        .orient("bottom").ticks(10).tickFormat(d3.time.format("%m/%d %H:%M"));
+        .orient("bottom").ticks(3).tickFormat(d3.time.format("%m/%d %H:%M"));
 
     var yAxis = d3.svg.axis().scale(y)
         .orient("left").ticks(5);
@@ -200,7 +200,7 @@ function setd3() {
         svg.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")")
-            .call(xAxis);
+            .call(xAxis)
 
         // Add the Y Axis
         svg.append("g")
