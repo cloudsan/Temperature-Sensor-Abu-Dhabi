@@ -23,6 +23,40 @@ function checkLogin() {
 
 
 }
+
+function logout() {
+    window.localStorage.removeItem("loginPromise");
+    window.location.reload();
+}
+
+function login() {
+    openFB.login(
+        function(response) {
+            if (response.status === 'connected') {
+                // alert('Facebook login succeeded, got access token: ' + response.authResponse.token);
+                var token = "Bearer " + response.authResponse.token;
+                // console.log(token);
+                var loginPromise = $.ajax({
+                    method: 'POST',
+                    url: serverurl + 'api-token/login/facebook/',
+                    headers: {
+                        'Authorization': token
+                    },
+                    success: function(data) {
+                        // console.log(loginPromise);
+                        window.localStorage.setItem("loginPromise", JSON.stringify(data));
+                        window.location.reload();
+                    }
+                });
+
+
+            } else {
+                alert('Facebook login failed: ' + response.error);
+            }
+        }, {
+            scope: 'email,publish_actions'
+        });
+}
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
