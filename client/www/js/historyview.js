@@ -84,7 +84,7 @@ function setd3() {
     var y2 = d3.scale.linear().range([height, 0]);
     // Define the axes
     var xAxis = d3.svg.axis().scale(x)
-        .orient("bottom").ticks(5).tickFormat(d3.time.format("%m/%d %H:%M"));
+        .orient("bottom").ticks(10).tickFormat(d3.time.format("%m/%d %H:%M"));
 
     var yAxis = d3.svg.axis().scale(y)
         .orient("left").ticks(5);
