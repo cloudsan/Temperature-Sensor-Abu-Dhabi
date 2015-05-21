@@ -1,0 +1,52 @@
+2015-05-20 13:09:22.939 hello[21069:1983731] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/cloudsan/Library/Developer/CoreSimulator/Devices/A5EC533D-ECC0-49BE-BED8-2F6C6FB4C89D/data/Containers/Data/Application/255E73CA-BCD8-42ED-A46C-38897227446D/Library/Cookies/Cookies.binarycookies
+2015-05-20 13:09:24.317 hello[21069:1983731] Apache Cordova native platform version 3.8.0 is starting.
+2015-05-20 13:09:24.317 hello[21069:1983731] Multi-tasking -> Device: YES, App: YES
+2015-05-20 13:09:25.837 hello[21069:1983731] Unlimited access to network resources
+2015-05-20 13:09:25.870 hello[21069:1983731] 
+
+Started backup to iCloud! Please be careful.
+Your application might be rejected by Apple if you store too much data.
+For more information please read "iOS Data Storage Guidelines" at:
+https://developer.apple.com/icloud/documentation/data-storage/
+To disable web storage backup to iCloud, set the BackupWebStorage preference to "local" in the Cordova config.xml file
+
+2015-05-20 13:09:27.333 hello[21069:1983731] Resetting plugins due to page load.
+2015-05-20 13:09:34.421 hello[21069:1983731] Finished load of: file:///Users/cloudsan/Library/Developer/CoreSimulator/Devices/A5EC533D-ECC0-49BE-BED8-2F6C6FB4C89D/data/Containers/Bundle/Application/52A211FC-23D1-4858-9764-BB90E31D0EFB/hello.app/www/index.html
+2015-05-20 13:10:17.047 hello[21069:1983731] THREAD WARNING: ['InAppBrowser'] took '125.927002' ms. Plugin should use a background thread.
+2015-05-20 13:10:29.437 hello[21069:1983731] THREAD WARNING: ['InAppBrowser'] took '51.153809' ms. Plugin should use a background thread.
+2015-05-20 14:01:10.246 hello[22023:2069207] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/cloudsan/Library/Developer/CoreSimulator/Devices/A5EC533D-ECC0-49BE-BED8-2F6C6FB4C89D/data/Containers/Data/Application/63760E06-64DA-44E7-AC56-E2A9BB4D7716/Library/Cookies/Cookies.binarycookies
+2015-05-20 14:01:10.511 hello[22023:2069207] Apache Cordova native platform version 3.8.0 is starting.
+2015-05-20 14:01:10.512 hello[22023:2069207] Multi-tasking -> Device: YES, App: YES
+2015-05-20 14:01:10.560 hello[22023:2069207] Unlimited access to network resources
+2015-05-20 14:01:10.571 hello[22023:2069207] 
+
+Started backup to iCloud! Please be careful.
+Your application might be rejected by Apple if you store too much data.
+For more information please read "iOS Data Storage Guidelines" at:
+https://developer.apple.com/icloud/documentation/data-storage/
+To disable web storage backup to iCloud, set the BackupWebStorage preference to "local" in the Cordova config.xml file
+
+2015-05-20 14:01:11.123 hello[22023:2069207] Resetting plugins due to page load.
+2015-05-20 14:01:12.447 hello[22023:2069207] Finished load of: file:///Users/cloudsan/Library/Developer/CoreSimulator/Devices/A5EC533D-ECC0-49BE-BED8-2F6C6FB4C89D/data/Containers/Bundle/Application/97C78F6D-1FDB-4444-90F2-40FDEC158904/hello.app/www/index.html
+2015-05-20 15:11:02.340 hello[24684:2133614] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/cloudsan/Library/Developer/CoreSimulator/Devices/A5EC533D-ECC0-49BE-BED8-2F6C6FB4C89D/data/Containers/Data/Application/4F2E111C-3F39-4FD1-BFED-7B30AE789A72/Library/Cookies/Cookies.binarycookies
+2015-05-20 15:11:02.456 hello[24684:2133614] Apache Cordova native platform version 3.8.0 is starting.
+2015-05-20 15:11:02.457 hello[24684:2133614] Multi-tasking -> Device: YES, App: YES
+2015-05-20 15:11:02.465 hello[24684:2133614] Unlimited access to network resources
+2015-05-20 15:11:02.696 hello[24684:2133614] Resetting plugins due to page load.
+2015-05-20 15:11:04.353 hello[24684:2133614] Finished load of: file:///Users/cloudsan/Library/Developer/CoreSimulator/Devices/A5EC533D-ECC0-49BE-BED8-2F6C6FB4C89D/data/Containers/Bundle/Application/3CF7ABF3-7E02-4AAB-A3D3-9E6899B856B6/hello.app/www/index.html
+2015-05-20 15:11:39.275 hello[24684:2133778] Terminating since there is no system app.
+2015-05-20 15:13:19.543 hello[25774:2137509] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/cloudsan/Library/Developer/CoreSimulator/Devices/A5EC533D-ECC0-49BE-BED8-2F6C6FB4C89D/data/Containers/Data/Application/674322C1-50D5-4219-BED5-D9636BDEFEBE/Library/Cookies/Cookies.binarycookies
+2015-05-20 15:13:19.682 hello[25774:2137509] Apache Cordova native platform version 3.8.0 is starting.
+2015-05-20 15:13:19.682 hello[25774:2137509] Multi-tasking -> Device: YES, App: YES
+2015-05-20 15:13:19.687 hello[25774:2137509] Unlimited access to network resources
+2015-05-20 15:13:19.841 hello[25774:2137509] Resetting plugins due to page load.
+2015-05-20 15:13:21.168 hello[25774:2137509] Finished load of: file:///Users/cloudsan/Library/Developer/CoreSimulator/Devices/A5EC533D-ECC0-49BE-BED8-2F6C6FB4C89D/data/Containers/Bundle/Application/33CB6367-1B5B-42A2-A42E-5C7F5B4161D2/hello.app/www/index.html
+2015-05-20 15:13:28.493 hello[25774:2137522] Terminating since there is no system app.
+2015-05-20 15:15:44.775 hello[26379:2140799] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/cloudsan/Library/Developer/CoreSimulator/Devices/AD01948C-F630-4980-A956-2CA144BD6492/data/Containers/Data/Application/367C5573-E994-42B4-95BE-C5E34FCDF1F5/Library/Cookies/Cookies.binarycookies
+2015-05-20 15:15:44.962 hello[26379:2140799] Apache Cordova native platform version 3.8.0 is starting.
+2015-05-20 15:15:44.963 hello[26379:2140799] Multi-tasking -> Device: YES, App: YES
+2015-05-20 15:15:44.967 hello[26379:2140799] Unlimited access to network resources
+2015-05-20 15:15:45.470 hello[26379:2140799] Resetting plugins due to page load.
+2015-05-20 15:15:50.050 hello[26379:2140799] Finished load of: file:///Users/cloudsan/Library/Developer/CoreSimulator/Devices/AD01948C-F630-4980-A956-2CA144BD6492/data/Containers/Bundle/Application/E9C6FA01-0037-4EC1-953F-327520C6A7BA/hello.app/www/index.html
+2015-05-20 15:15:55.507 hello[26379:2140799] THREAD WARNING: ['InAppBrowser'] took '161.750977' ms. Plugin should use a background thread.
+2015-05-20 15:16:21.496 hello[26379:2140799] THREAD WARNING: ['InAppBrowser'] took '46.793945' ms. Plugin should use a background thread.

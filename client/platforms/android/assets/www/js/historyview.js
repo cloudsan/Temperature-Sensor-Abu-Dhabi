@@ -23,6 +23,40 @@ function checkLogin() {
 
 
 }
+
+function logout() {
+    window.localStorage.removeItem("loginPromise");
+    window.location.reload();
+}
+
+function login() {
+    openFB.login(
+        function(response) {
+            if (response.status === 'connected') {
+                // alert('Facebook login succeeded, got access token: ' + response.authResponse.token);
+                var token = "Bearer " + response.authResponse.token;
+                // console.log(token);
+                var loginPromise = $.ajax({
+                    method: 'POST',
+                    url: serverurl + 'api-token/login/facebook/',
+                    headers: {
+                        'Authorization': token
+                    },
+                    success: function(data) {
+                        // console.log(loginPromise);
+                        window.localStorage.setItem("loginPromise", JSON.stringify(data));
+                        window.location.reload();
+                    }
+                });
+
+
+            } else {
+                alert('Facebook login failed: ' + response.error);
+            }
+        }, {
+            scope: 'email,publish_actions'
+        });
+}
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -50,7 +84,7 @@ function setd3() {
     var y2 = d3.scale.linear().range([height, 0]);
     // Define the axes
     var xAxis = d3.svg.axis().scale(x)
-        .orient("bottom").ticks(5).tickFormat(d3.time.format("%m/%d %H:%M"));
+        .orient("bottom").ticks(3).tickFormat(d3.time.format("%m/%d %H:%M"));
 
     var yAxis = d3.svg.axis().scale(y)
         .orient("left").ticks(5);
@@ -166,7 +200,7 @@ function setd3() {
         svg.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")")
-            .call(xAxis);
+            .call(xAxis)
 
         // Add the Y Axis
         svg.append("g")
@@ -433,7 +467,9 @@ function setMap() {
 }
 
 $(document).ready(function($) {
-
+    openFB.init({
+        appId: '1007553055921839'
+    });
     var loginPromise = window.localStorage.getItem("loginPromise");
     $('.fb-share-button').attr('data-href',window.location.href);
     checkLogin();

@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>BB5FE0ED-0C4F-4803-9EAA-2B5F5C1ADA20</string>
 	<key>IDESourceControlProjectName</key>
-	<string>hello</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>7E35DAFD06E8E28C39D84EA1788FDCDA2D2BFE0F</key>
 		<string>https://github.com/cloudsan/Temperature-Sensor-Abu-Dhabi.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>client/platforms/ios/hello.xcodeproj</string>
+	<string>client/platforms/ios/hello.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>7E35DAFD06E8E28C39D84EA1788FDCDA2D2BFE0F</key>
