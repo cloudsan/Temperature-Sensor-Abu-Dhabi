@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <meta name="author" content="">
+    <title>Local Weather Information</title>
+    <meta property="og:title" content="Local Weather Information" />
+    <meta property="og:description" content="On the home page of Local Weather Information, you can find the weather information of most popular spots in your local area. Let's go out and enjoy the Summer" />
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css">
+    <!-- MetisMenu CSS -->
+    <link rel="stylesheet" href="metisMenu/dist/metisMenu.min.css">
+    <script type="text/javascript" src='js/jquery.js'></script>
+    <script type="text/javascript" src="js/jquery.blockui.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="metisMenu/dist/metisMenu.min.js"></script>
+    <!-- D3 JavaScript -->
+    <script type="text/javascript" src='js/d3.min.js'></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    <script type="text/javascript" src="js/historyview.js">
+    </script>
+    <link rel="stylesheet" href="css/historyview.css"></link>
+    <script src="js/moment.js"></script>
+    <script src="js/moment-timezone.min.js"></script>
+    <script type="text/javascript">
+    function toTimeZone(time) {
+
+        return moment(time).format('YYYY/MM/DD HH:mm');
+    }
+    </script>
+    <style type="text/css" media="screen">
+    /*
+A custom Bootstrap 3.1 theme from http://bootply.com\
+
+This CSS code should follow the 'bootstrap.css'
+in your HTML file.
+
+license: MIT
+author: bootply.com
+*/
+
+    html,
+    body {
+        height: 100%;
+    }
+
+    body {
+        padding-top: 50px;
+        /*padding for navbar*/
+    }
+
+    .navbar-custom .icon-bar {
+        background-color: #fff;
+    }
+
+    .navbar-custom {
+        background-color: #168ccc;
+        color: #fff;
+    }
+
+    .navbar-custom li>a:hover,
+    .navbar-custom li>a:focus {
+        background-color: #49bfff;
+    }
+
+    .navbar-custom a {
+        color: #fefefe;
+    }
+
+    .navbar-custom .form-control:focus {
+        border-color: #49bfff;
+        outline: 0;
+        -webkit-box-shadow: inset 0 0 0;
+        box-shadow: inset 0 0 0;
+    }
+
+    #main,
+    #main>.row {
+        height: 100%;
+    }
+
+    #main>.row {
+        overflow-y: scroll;
+    }
+
+    #left {
+        height: 100%;
+    }
+
+
+    </style>
+</head>
+
+<body>
+    <div class="navbar navbar-custom navbar-fixed-top">
+        <div class="navbar-header"><a class="navbar-brand" href="#">Local Weather Information</a>
+            <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="index.html">Home</a></li>
+                <li id='userlogin'><a href="#" onclick="login()">Login</a></li>
+                <li id='userinfo'><a href="#">Hi</a></li>
+                <li id='userlogout'><a href="#" onclick="logout()">Logout</a></li>
+                <li>&nbsp;</li>
+            </ul>
+            <!-- <form class="navbar-form">
+                <div class="form-group" style="display:inline;">
+                    <div class="input-group">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-chevron-down"></span></button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Category 1</a></li>
+                                <li><a href="#">Category 2</a></li>
+                                <li><a href="#">Category 3</a></li>
+                                <li><a href="#">Category 4</a></li>
+                                <li><a href="#">Category 5</a></li>
+                            </ul>
+                        </div>
+                        <input type="text" class="form-control" placeholder="What are searching for?">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span> </span>
+                    </div>
+                </div>
+            </form> -->
+        </div>
+    </div>
+
+    <div id="wrapper">
+        <!-- Navigation -->
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header" id='titleh1'></h1>
+                    <h1 id="favDiv">
+                        <button id="btnAddFav" type="button" class="btn btn-primary">add to Favorite</button>
+                        <button id="btnRmFav" type="button"  class="btn btn-primary">Favorited</button>
+</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-6 col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-comments fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div id="label_updatedTime" class="huge"></div>
+                                    <div>Last Update Time</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-yellow">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-shopping-cart fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div id="label_updatedTemp" class="huge"></div>
+                                    <div>Last Update Tempareture</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-red">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-support fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div id="label_updatedHumi" class="huge"></div>
+                                    <div>Humidity</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <a href="#">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a> -->
+                    </div>
+                </div>
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-9 col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-bar-chart-o fa-fw"></i> Historical Data View
+                            <div class="pull-right">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                        Actions
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu pull-right" role="menu">
+                                        <li><a href="#">Action</a>
+                                        </li>
+                                        <li><a href="#">Another action</a>
+                                        </li>
+                                        <li><a href="#">Something else here</a>
+                                        </li>
+                                        <li class="divider"></li>
+                                        <li><a href="#">Separated link</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div id="svg-container"></div>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                </div>
+                <div class="col-lg-3 col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-bar-chart-o fa-fw"></i> Location
+                            <div class="pull-right">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                        Actions
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu pull-right" role="menu">
+                                        <li><a href="#">Action</a>
+                                        </li>
+                                        <li><a href="#">Another action</a>
+                                        </li>
+                                        <li><a href="#">Something else here</a>
+                                        </li>
+                                        <li class="divider"></li>
+                                        <li><a href="#">Separated link</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div id="map-canvas"></div>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                </div>
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
+    </div>
+</body>
+
+</html>
